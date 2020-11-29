@@ -1,20 +1,20 @@
 package Game;
 
 public class Position {
-    private int x;
-    private int y;
-
-    public int getY() {
-        return y;
-    }
-
-    public int getX() {
-        return x;
-    }
+    protected int x;
+    protected int y;
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 
     public void setPosition(int x, int y) {
