@@ -1,0 +1,34 @@
+1 13 13
+#############
+#p*         #
+# #     g   #
+# #  *      #
+# *#s   f   #
+#   fff     #
+#       x   #
+#   *       #
+#    b      #
+#   #       #
+#   #       #
+#   #    1  #
+#############
+
+(Number or Level) (Rows) (Columns)
+
+Info Tiles:
+# - Wall
+* - Brick
+g - Portal
+
+Mobs:
+p - Player
+1 - Balloom
+2 - Oneal
+3 - Doll
+5 - Condoria
+Powerups:
+b - Powerup Bombs
+f - Powerup Flames
+s - Powerup Speed
+
+
