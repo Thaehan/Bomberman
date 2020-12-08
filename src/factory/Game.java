@@ -10,27 +10,16 @@ import java.awt.image.BufferStrategy;
 
 
 public class Game extends Canvas {
-	public static final int DEFAULT_SIZE = 16,
-	WIDTH = DEFAULT_SIZE * 13,
-	HEIGHT = 13 * DEFAULT_SIZE;
-                         
-	public static int WIDTHTile = 31;
-	public static int HEIGHTTile = 14;
-        
-        // tỉ lệ ? 
-	public static int SCALE = 3;
-	public static final int limitedTime = 200;
-	private static final int startBombs = 1;
-	private static final int startPower = 1;
-	private static final double startSpeed = 1.0;
-	public static int startLives = 1;
-	protected static int presentBombs = startBombs;
-	protected static int presentPower = startPower;
-	protected static double bomberSpeed = startSpeed;
-	protected static int presentLives = startLives;
+	public static final int DEFAULT_SIZE = 16, WIDTH_TILE = 20, HEIGHT_TILE = 15;
+	public static int WIDTH = DEFAULT_SIZE * WIDTH_TILE;
+	public static int HEIGHT = DEFAULT_SIZE * HEIGHT_TILE;
 
-	protected static int delayTransition = 3;
-	protected int presentDelayTransition = delayTransition;
+	protected static int bombs = 1;
+	protected static int power = 1;
+	protected static double speed = 1.0;
+	protected static int lives = 1;
+
+	protected int presentDelayTransition = 3;
 
 	private Controller input;
         //nút pause
@@ -38,17 +27,16 @@ public class Game extends Canvas {
 	private boolean isPaused = true;
 	
         
-	private Board board;
+	private ControlPanel controlPanel;
 	private Renderer renderer;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
 	public Game(GameJFrame frame) {
-		renderer = new Renderer (WIDTH, HEIGHT);
-		input = new Controller ();
-		
-		board = new Board(this, input , renderer);
+		renderer = new Renderer(WIDTH, HEIGHT);
+		input = new Controller();
+		controlPanel = new ControlPanel(this, input , renderer);
 		addKeyListener(input);
 	}
 	
@@ -60,7 +48,7 @@ public class Game extends Canvas {
 			return;
 		}
 		renderer.clear();
-		board.render(renderer);
+		controlPanel.render(renderer);
 		System.arraycopy(renderer.pixels , 0, pixels, 0, pixels.length);
 		
 		Graphics g = bs.getDrawGraphics();
@@ -78,14 +66,14 @@ public class Game extends Canvas {
 		renderer.clear();
 		Graphics g = bs.getDrawGraphics();
 		
-		board.renderScreen(g);
+		controlPanel.renderScreen(g);
 		g.dispose();
 		bs.show();
 	}
 
 	private void update() {
 		input.update();
-		board.update();
+		controlPanel.update();
 	}
 
 	//thời gian thực trong quá khư , vòng loop cũ
@@ -115,7 +103,7 @@ public class Game extends Canvas {
 
 			if (isPaused) {
 				if (presentDelayTransition <= 0) {
-					board.setShow(-1);
+					controlPanel.setShow(-1);
 					isPaused = false;
 				}
 				renderScreen();
@@ -127,7 +115,7 @@ public class Game extends Canvas {
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				if (board.getShow() == 2) {
+				if (controlPanel.getShow() == 2) {
 					--presentDelayTransition;
 				}
 			}
@@ -135,36 +123,36 @@ public class Game extends Canvas {
 		}
 	}
         
-	public Board getBoard() {
-		return board;
+	public ControlPanel getBoard() {
+		return controlPanel;
 	}
         
-	public static double getBomberSpeed() {
-		return bomberSpeed;
+	public static double getSpeed() {
+		return speed;
 	}
 	
-	public static int getPresentBombs () {
-		return presentBombs;
+	public static int getBombs() {
+		return bombs;
 	}
 	
-	public static int getPresentPower () {
-		return presentPower;
+	public static int getPower() {
+		return power;
 	}
 
 	public static void addBomberSpeed(double i) {
-		bomberSpeed += i;
+		speed += i;
 	}
 	
 	public static void addBombRadius(int i) {
-		presentPower += i;
+		power += i;
 	}
 	
 	public static void addBombRate(int i) {
-		presentBombs += i;
+		bombs += i;
 	}
         
 	public void resetScreenDelay() {
-		presentDelayTransition = delayTransition;
+		presentDelayTransition = 3;
 	}
 
 	public boolean isPaused() {
@@ -176,8 +164,8 @@ public class Game extends Canvas {
 	}
 
 	public static void resetPower(){
-		bomberSpeed = startSpeed;
-		presentPower = startPower;
-		presentBombs = startBombs;
+		speed = 1.0;
+		power = 1;
+		bombs = 1;
 	}
 }

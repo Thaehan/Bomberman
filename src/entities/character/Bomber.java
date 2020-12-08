@@ -1,7 +1,7 @@
 package entities.character;
 
 import java.util.ArrayList;
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
 import entities.Entity;
 import entities.bomb.Bomb;
@@ -15,17 +15,15 @@ import entities.bomb.Flame;
 import entities.bomb.FlameRange;
 import entities.character.enemy.Enemy;
 import entities.barrier.item.Item;
-import entities.PositionHandling;
 
 public class Bomber extends Character {
     private List<Bomb> bomb;
     protected Controller input;
-    public static List<Item> _powerups = new ArrayList<Item>();
-    
-    
+    public static List<Item> powerUp = new ArrayList<Item>();
+
     public void powerUp(Item item) {
         if(item.isRemoved()) return;
-        _powerups.add(item);
+        powerUp.add(item);
         item.powerUp ();
     }
     
@@ -36,10 +34,10 @@ public class Bomber extends Character {
      */
     protected int bombPlantDelay = 0;
 
-    public Bomber(int x, int y, Board board) {
-        super(x, y, board);
-        bomb = this.board.getBombs();
-        input = this.board.getInput();
+    public Bomber(int x, int y, ControlPanel controlPanel) {
+        super(x, y, controlPanel);
+        bomb = this.controlPanel.getBombs();
+        input = this.controlPanel.getInput();
         sprite = Sprite.player_right;
         
     }
@@ -78,9 +76,9 @@ public class Bomber extends Character {
     // set thời gian chờ cho đợt bom tới
 
     private void checkPlacedBom() {
-        if(bombPlantDelay < 0 && Game.getPresentBombs () > 0 && input.space) {
-            int xg = PositionHandling.pixelToTile(positionX + sprite.getSize() / 2);
-            int yg = PositionHandling.pixelToTile((positionY + sprite.getSize() / 2) - sprite.getSize());
+        if(bombPlantDelay < 0 && Game.getBombs() > 0 && input.space) {
+            int xg = pixelToTile(positionX + sprite.getSize() / 2);
+            int yg = pixelToTile((positionY + sprite.getSize() / 2) - sprite.getSize());
             placeBomb(xg,yg);
             Game.addBombRate(-1);
             bombPlantDelay = 25;
@@ -88,8 +86,8 @@ public class Bomber extends Character {
     }
 
     protected void placeBomb(int x, int y) {
-        Bomb bom = new Bomb(x, y, board);
-        board.addBomb(bom);
+        Bomb bom = new Bomb(x, y, controlPanel);
+        controlPanel.addBomb(bom);
     }
 
     private void clearBombs() {
@@ -109,7 +107,7 @@ public class Bomber extends Character {
             return;
         }
         isAlive = false;
-        board.addLives(-1);
+        controlPanel.addLives(-1);
     }
 
     protected void afterKill() {
@@ -118,12 +116,12 @@ public class Bomber extends Character {
         }
         else {
             if(bomb.size() == 0) {
-				if(board.getLives() == 0) {
-                    board.endGame();
+				if(controlPanel.getLives() == 0) {
+                    controlPanel.endGame();
                 }
 				else{
-					board.restartLevel();
-					this._powerups.clear();
+					controlPanel.restartLevel();
+					this.powerUp.clear();
 					Game.resetPower ();
 				}
 			}
@@ -139,7 +137,7 @@ public class Bomber extends Character {
 	    // kiểm tra xem đã ấn nút để di chuyển chưa? rồi  gọi move() để thực hiện di chuyển
 	    if(xa != 0 || ya != 0)  {
 	        // di chuyển phụ thộc tốc độ
-		    move(xa * Game.getBomberSpeed(), ya * Game.getBomberSpeed());
+		    move(xa * Game.getSpeed(), ya * Game.getSpeed());
             moveAble = true;
                 
 	    }
@@ -159,13 +157,10 @@ public class Bomber extends Character {
         c2 c3 //  dưới
      */
     public boolean canMove(double x, double y) {
-
-        for (int c = 0; c < 4; c++) { //kiểm tra 4 góc 
-
+        for (int c = 0; c < 4; c++) { //kiểm tra 4 góc
             double xt = ((positionX + x ) + c % 2 * 11 ) / Game.DEFAULT_SIZE;
             double yt = ((positionY + y ) + c / 2 * 12 - 15 ) / Game.DEFAULT_SIZE;
-
-            Entity a = board.getEntity(xt, yt, this);
+            Entity a = controlPanel.getEntity(xt, yt, this);
 		    if(!a.collide(this)) {
                 return false;
             }
@@ -258,6 +253,7 @@ public class Bomber extends Character {
     public List<Bomb> getBombs() {
         return bomb;
     }
-    
+
+
      
 }

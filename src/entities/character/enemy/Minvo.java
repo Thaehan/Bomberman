@@ -5,7 +5,7 @@
  */
 package entities.character.enemy;
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
 import graphics.Sprite;
 
@@ -14,10 +14,11 @@ import graphics.Sprite;
  * @author DoQuangTrung
  */
 public class Minvo extends Enemy{
-    public Minvo(int x, int y, Board board) {
-		super(x, y, board, Sprite.minvo_dead, Game.getBomberSpeed() * 0.1);
+    public Minvo(int x, int y, ControlPanel controlPanel) {
+		super(x, y, controlPanel, Sprite.minvo_dead, Game.getSpeed() * 0.1);
 		sprite = Sprite.minvo_right1;
-		moveMent = ai.calculateDirection();
+		bot = new Bot();
+		moveMent = bot.calculateDirection();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package graphics;
 
 import factory.Game;
 import entities.Entity;
+import factory.Map;
 
 import java.awt.Graphics;
 import java.awt.Font;
@@ -13,7 +14,7 @@ public class Renderer {
 	public int[] pixels;
 	private int transparentColor = 0xffff00ff;
 	
-	public Renderer (int width, int height) {
+	public Renderer(int width, int height) {
 		this.width = width;
 		this.height = height;
 		pixels = new int[width * height];
@@ -65,22 +66,26 @@ public class Renderer {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getRealWidth(), getRealHeight());
 		
-		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
+		Font font = new Font("Arial", Font.PLAIN, 20 * 3);
 		g.setFont(font);
 		g.setColor(Color.white);
 		renderTitle ("You lose!", getRealWidth(), getRealHeight(), g);
 
 	}
 
-	public void renderLevelUp(Graphics g, int level) {
-		g.setColor(Color.black);
+	public void start(Graphics g, Map map) {
+		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getRealWidth(), getRealHeight());
-		
-		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
+
+		Font font = new Font("Arial", Font.PLAIN, 20 * 3);
 		g.setFont(font);
-		g.setColor(Color.white);
-		renderTitle ("LEVEL " + level, getRealWidth(), getRealHeight(), g);
-		
+		g.setColor(Color.LIGHT_GRAY);
+		if (map.getLevel() == 1) {
+			renderTitle("Start", getRealWidth(), getRealHeight(), g);
+		}
+		else {
+			renderTitle("Level " + map.getLevel(),getRealWidth(), getRealHeight(), g);
+		}
 	}
 
 	public void renderTitle(String s, int w, int h, Graphics g) {
@@ -91,10 +96,10 @@ public class Renderer {
 	}
 	
 	public int getRealWidth() {
-		return width * Game.SCALE;
+		return width * 3;
 	}
 	
 	public int getRealHeight() {
-		return height * Game.SCALE;
+		return height * 3;
 	}
 }

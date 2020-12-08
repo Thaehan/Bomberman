@@ -1,19 +1,18 @@
 package entities.character.enemy;
 
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
-import entities.character.enemy.ai.AIAdvance;
 import graphics.Sprite;
 
 public class Oneal extends Enemy {
 	      
         
-	public Oneal(int x, int y, Board board) {
-		super(x, y, board, Sprite.oneal_dead, Game.getBomberSpeed()*1.1);
+	public Oneal(int x, int y, ControlPanel controlPanel) {
+		super(x, y, controlPanel, Sprite.oneal_dead, Game.getSpeed()*1.1);
 		sprite = Sprite.oneal_left1;
-		ai = new AIAdvance(this.board.getBomber(), this, board);
-		moveMent = ai.calculateDirection();
+		bot = new Bot();
+		moveMent = bot.calculateDirection();
 	}
 	
 	@Override

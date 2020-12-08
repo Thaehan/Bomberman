@@ -1,6 +1,6 @@
 package entities.bomb;
 
-import factory.Board;
+import factory.ControlPanel;
 import entities.Entity;
 import entities.character.Bomber;
 import entities.character.enemy.Enemy;
@@ -8,7 +8,7 @@ import graphics.Renderer;
 //import uet.oop.bomberman.sound_effective.Sound;
 
 public class Flame extends Entity {
-	protected Board board;
+	protected ControlPanel controlPanel;
 	protected int moveMent;
 	private int firePower;
 	protected int xOrigin, yOrigin;
@@ -21,14 +21,14 @@ public class Flame extends Entity {
 	 * @param direction là hướng của Flame
 	 * @param firePower độ dài cực đại của Flame
 	 */
-	public Flame(int x, int y, int direction, int firePower, Board board) {
+	public Flame(int x, int y, int direction, int firePower, ControlPanel controlPanel) {
 		xOrigin = x;
 		yOrigin = y;
 		positionX = x;
 		positionY = y;
 		moveMent = direction;
 		this.firePower = firePower;
-		this.board = board;
+		this.controlPanel = controlPanel;
 		createFlameRange();
 	}
 
@@ -81,7 +81,7 @@ public class Flame extends Entity {
 				x--;// sang trái
 			}
 			// không thể bị đi qua
-			Entity entity = board.getEntity(x, y, null);
+			Entity entity = controlPanel.getEntity(x, y, null);
 
 			if (!entity.collide(this)) {
 				break;

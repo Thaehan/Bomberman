@@ -2,39 +2,33 @@ package factory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameJFrame extends JFrame {
-	public GamePanel gamePanel;
-	private JPanel mainPanel;
-	
+	public JPanel gamePanel;
 	private Game game;
 
-	public GameJFrame () {
+	public GameJFrame() {
 		setTitle("Bomberman");
-		mainPanel = new JPanel(new BorderLayout());
-		gamePanel = new GamePanel(this);
-		mainPanel.add(gamePanel , BorderLayout.PAGE_END);
-		
-		game = gamePanel.getGame();
-		
-		add(mainPanel);
+		gamePanel = new JPanel(new BorderLayout());
+		gamePanel.setPreferredSize(new Dimension(Game.WIDTH * 3, Game.HEIGHT * 3));
+
+		game = new Game(this);
+		gamePanel.add(game);
+		game.setVisible(true);
+		gamePanel.setVisible(true);
+		gamePanel.setFocusable(true);
+		add(gamePanel, BorderLayout.PAGE_END);
 		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-		setVisible(true);	
-		
+		setVisible(true);
+
+		Sound.music();
 		game.start();
 	}
 
-	public static void replay() {
-		JButton replay = new JButton("Try again");
-		replay.setPreferredSize(new Dimension(Game.DEFAULT_SIZE * 2, Game.DEFAULT_SIZE));
-	}
-
-
-	public void newGame() {
-		game.getBoard().newGame();
-	}
 }

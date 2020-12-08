@@ -1,19 +1,18 @@
 package entities.character.enemy;
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
 import entities.Entity;
 import entities.bomb.Flame;
 import entities.character.Bomber;
 import entities.character.Character;
-import entities.character.enemy.ai.AI;
 import graphics.Renderer;
 import graphics.Sprite;
 //import uet.oop.bomberman.sound_effective.Sound;
 
 public abstract class Enemy extends Character {
 	protected double speed;
-	protected AI ai;
+	protected Bot bot;
 
 	protected final double MAX_STEPS;
 	protected final double rest;
@@ -22,8 +21,8 @@ public abstract class Enemy extends Character {
 	protected int finalAnimation = 30;
 	protected Sprite deadSprite;
 	
-	public Enemy(int x, int y, Board board, Sprite dead, double speed) {
-		super(x, y, board);
+	public Enemy(int x, int y, ControlPanel controlPanel, Sprite dead, double speed) {
+		super(x, y, controlPanel);
 		this.speed = speed;
 		MAX_STEPS = Game.DEFAULT_SIZE / this.speed;
 		rest = (MAX_STEPS - (int) MAX_STEPS) / MAX_STEPS;
@@ -71,7 +70,7 @@ public abstract class Enemy extends Character {
 		int xa = 0, ya = 0;
             
 		if (footStep <= 0){
-			moveMent = ai.calculateDirection();
+			moveMent = bot.calculateDirection();
 			footStep = MAX_STEPS;
 		}
 
@@ -127,7 +126,7 @@ public abstract class Enemy extends Character {
 		int xx = pixelToTile(xr) +(int)x;
 		int yy = pixelToTile(yr) +(int)y;
 		
-		Entity a = board.getEntity(xx, yy, this); //entity of the position we want to go
+		Entity a = controlPanel.getEntity(xx, yy, this); //entity of the position we want to go
 		
 		return a.collide(this);		
                 

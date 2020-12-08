@@ -1,6 +1,6 @@
 package entities.bomb;
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
 import entities.AnimationEntity;
 import entities.Entity;
@@ -13,7 +13,7 @@ public class Bomb extends AnimationEntity {
 	protected double timer = 120;
 	public int explodeTime = 20;
 	
-	protected Board board;
+	protected ControlPanel controlPanel;
 	protected Flame[] flame;
 	protected boolean isExploded = false;
 	protected boolean throughable = true;
@@ -26,10 +26,10 @@ public class Bomb extends AnimationEntity {
         return throughable;
     }
 
-	public Bomb(int x, int y, Board board) {
+	public Bomb(int x, int y, ControlPanel controlPanel) {
     	positionX = x;
 		positionY = y;
-		this.board = board;
+		this.controlPanel = controlPanel;
 		sprite = Sprite.bomb;
 	}
 
@@ -82,14 +82,14 @@ public class Bomb extends AnimationEntity {
 	protected void explode() {
     	isExploded = true;
     	throughable = true;
-    	if (this.board.getBomber().getXTile() == this.getXTile() && this.getYTile() == this.board.getBomber().getYTile()) {
-    		this.board.getBomber().kill();
+    	if (this.controlPanel.getBomber().getXTile() == this.getXTile() && this.getYTile() == this.controlPanel.getBomber().getYTile()) {
+    		this.controlPanel.getBomber().kill();
     	}
 
     	//Create flame explode
 		flame = new Flame[4];
     	for (int i = 0; i < flame.length; i++) {
-    		flame[i] = new Flame((int) positionX, (int) positionY, i, Game.getPresentPower(), board);
+    		flame[i] = new Flame((int) positionX, (int) positionY, i, Game.getPower(), controlPanel);
     	}
 	}
 	

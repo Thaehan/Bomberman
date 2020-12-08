@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import entities.PositionHandling;
 import entities.StackedEntity;
 import entities.character.Bomber;
 import entities.character.enemy.Balloon;
@@ -22,14 +21,14 @@ import entities.barrier.item.SpeedItem;
 import graphics.Sprite;
 
 public class Map {
-	protected int width, height;
-	protected int level;
-	protected Board board;
+	protected int width = Game.WIDTH_TILE, height = Game.HEIGHT_TILE;
+	protected int level = 1;
+	protected ControlPanel controlPanel;
 
 	public static char[][] map;
 
-	public Map (Board board, int level){
-		this.board = board;
+	public Map(ControlPanel controlPanel, int level){
+		this.controlPanel = controlPanel;
 		loadLevel(level);
 	}
 
@@ -38,15 +37,12 @@ public class Map {
         	BufferedReader br = new BufferedReader(new FileReader("res\\levels\\level" + level + ".txt"));
 			String data = br.readLine();
 
-			this.level = Integer.parseInt(data.substring(0,1));
-			height = Integer.parseInt(data.substring(2,4));
-			width = Integer.parseInt(data.substring(5,7));
-
+			this.level = Integer.parseInt(data);
             map = new char[height][width];
-            for (int i = 0; i < height; i++ ) {
+            for (int i = 0; i < height; i++) {
                 data = br.readLine();
 
-                for (int j = 0; j < width; j++ ) {
+                for (int j = 0; j < width; j++) {
                     map[i][j] = data.charAt(j);
                 }
             }
@@ -62,62 +58,62 @@ public class Map {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				char newEntity = map[y][x];
-				int newPosition = x + y * width;
+				int position = x + y * width;
 				switch (newEntity) {
 					case '#':
-						board.addEntity (newPosition , new Wall (x , y , Sprite.wall));
+						controlPanel.addEntity(position, new Wall(x , y , Sprite.wall));
 						break;
 					case '*':
-						board.addEntity (newPosition , new StackedEntity (x , y , new Grass (x , y , Sprite.grass) , new Brick (x , y , Sprite.brick)));
+						controlPanel.addEntity(position, new StackedEntity(x , y , new Grass(x , y , Sprite.grass) , new Brick(x , y , Sprite.brick)));
 						break;
 					case 'p':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Bomber (PositionHandling.tileToPixel (x) , PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Bomber(tileToPixel (x) , tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					case 'f':
-						board.addEntity (newPosition , new StackedEntity (x , y , new Grass (x , y , Sprite.grass) ,
-								new FlameItem (x , y , Sprite.powerup_flames) , new Brick(x , y , Sprite.brick)));
+						controlPanel.addEntity(position, new StackedEntity(x , y , new Grass(x , y , Sprite.grass) ,
+								new FlameItem(x, y, Sprite.powerup_flames) , new Brick(x , y , Sprite.brick)));
 						break;
 					case 'b':
-						board.addEntity (newPosition , new StackedEntity (x , y , new Grass (x , y , Sprite.grass) ,
-								new BombItem (x , y , Sprite.powerup_bombs) , new Brick(x , y , Sprite.brick)));
+						controlPanel.addEntity(position, new StackedEntity(x , y , new Grass(x , y , Sprite.grass) ,
+								new BombItem(x , y, Sprite.powerup_bombs) , new Brick(x , y , Sprite.brick)));
 						break;
 					case 's':
-						board.addEntity (newPosition , new StackedEntity (x , y , new Grass (x , y , Sprite.grass) ,
-								new SpeedItem (x , y , Sprite.powerup_speed) , new Brick(x , y , Sprite.brick)));
+						controlPanel.addEntity(position, new StackedEntity(x , y , new Grass(x , y , Sprite.grass) ,
+								new SpeedItem(x , y, Sprite.powerup_speed) , new Brick(x , y , Sprite.brick)));
 						break;
 					case 'g':
-						board.addEntity (newPosition , new StackedEntity (x , y , new Grass (x , y , Sprite.grass) ,
-								new Portal (x , y , board , Sprite.portal) , new Brick(x , y , Sprite.brick)));
+						controlPanel.addEntity(position, new StackedEntity(x , y , new Grass(x , y , Sprite.grass) ,
+								new Portal(x , y , controlPanel, Sprite.portal) , new Brick(x , y , Sprite.brick)));
 						break;
 					//Create enemy
 					case '1':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Balloon (PositionHandling.tileToPixel (x) ,
-								PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Balloon(tileToPixel (x) ,
+								tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					case '2':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Oneal (PositionHandling.tileToPixel (x) ,
-								PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Oneal(tileToPixel (x) ,
+								tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					case '3':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Doll (PositionHandling.tileToPixel (x) ,
-								PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Doll(tileToPixel (x) ,
+								tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					case '4':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Minvo (PositionHandling.tileToPixel (x) ,
-								PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Minvo(tileToPixel (x) ,
+								tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					case '5':
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
-						board.addCharacter (new Kondoria (PositionHandling.tileToPixel (x) ,
-								PositionHandling.tileToPixel (y) + Game.DEFAULT_SIZE , board));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
+						controlPanel.addCharacter (new Kondoria(tileToPixel (x) ,
+								tileToPixel (y) + Game.DEFAULT_SIZE , controlPanel));
 						break;
 					default:
-						board.addEntity (newPosition , new Grass (x , y , Sprite.grass));
+						controlPanel.addEntity(position, new Grass(x , y , Sprite.grass));
 						break;
 				}
 			}
@@ -135,4 +131,21 @@ public class Map {
 	public int getLevel() {
 		return level;
 	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public static int pixelToTile(double i) {
+		return (int)(i / Game.DEFAULT_SIZE);
+	}
+
+	public static int tileToPixel(int i) {
+		return i * Game.DEFAULT_SIZE;
+	}
+
+	public static int tileToPixel(double i) {
+		return (int)(i * Game.DEFAULT_SIZE);
+	}
+
 }

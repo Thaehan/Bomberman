@@ -1,6 +1,6 @@
 package entities.character;
 
-import factory.Board;
+import factory.ControlPanel;
 import entities.AnimationEntity;
 import graphics.Renderer;
 
@@ -9,16 +9,16 @@ import graphics.Renderer;
  */
 public abstract class Character extends AnimationEntity {
 	
-	public Board board;
+	public ControlPanel controlPanel;
 	protected int moveMent;
 	protected boolean isAlive = true;
 	protected boolean moveAble = false;
 	public int timeAfter = 40;
 	
-	public Character(int x, int y, Board board) {
+	public Character(int x, int y, ControlPanel controlPanel) {
 		positionX = x;
 		positionY = y;
-		this.board = board;
+		this.controlPanel = controlPanel;
 	}
 
 	public abstract void update();

@@ -5,9 +5,8 @@
  */
 package entities.character.enemy;
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
-import entities.character.enemy.ai.AIMedium;
 import graphics.Sprite;
 
 /**
@@ -16,11 +15,11 @@ import graphics.Sprite;
  */
 public class Kondoria  extends Enemy{
     
-	public Kondoria(int x, int y, Board board) {
-		super (x, y, board, Sprite.kondoria_dead, Game.getBomberSpeed());
+	public Kondoria(int x, int y, ControlPanel controlPanel) {
+		super (x, y, controlPanel, Sprite.kondoria_dead, Game.getSpeed());
 		sprite = Sprite.kondoria_right1;
-		ai = new AIMedium (this.board.getBomber(), this, board);
-		moveMent = ai.calculateDirection();
+		bot = new Bot();
+		moveMent = bot.calculateDirection();
 	}
 
 	protected void chooseSprite() {

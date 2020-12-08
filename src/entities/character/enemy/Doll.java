@@ -1,17 +1,15 @@
 package entities.character.enemy;
 
-import factory.Board;
+import factory.ControlPanel;
 import factory.Game;
-import entities.character.enemy.ai.AILow;
 import graphics.Sprite;
 
 public class Doll extends Enemy {
-	public Doll (int x, int y, Board board) {
-		super (x, y, board, Sprite.doll_dead, Game.getBomberSpeed());
+	public Doll (int x, int y, ControlPanel controlPanel) {
+		super (x, y, controlPanel, Sprite.doll_dead, Game.getSpeed());
 		sprite = Sprite.doll_right1;
-
-		ai = new AILow (this.board.getBomber(), this, board);
-		moveMent = ai.calculateDirection();
+		bot = new Bot();
+		moveMent = bot.calculateDirection();
 	}
 
 	protected void chooseSprite () {
